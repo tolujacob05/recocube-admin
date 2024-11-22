@@ -29,6 +29,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { apiService } from "@/service/api-service";
+import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css";
 
 export type Product = {
   id: number;
@@ -69,13 +71,8 @@ const Inventory = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, ,] = useState(10);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const handleItemsPerPageChange = (e: any) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1); // Reset to the first page
-  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -171,6 +168,7 @@ const Inventory = () => {
       },
     });
     setImagePreview(null);
+    toast.success("Item successfully added. Please check inventory lists.");
   };
 
   const handleEditSave = () => {
@@ -185,6 +183,7 @@ const Inventory = () => {
     setIsOpen(false); // Close dialog
     setCurrentProduct(null); // Reset form
     setImagePreview(null); // Clear image preview
+    toast.success("Edit saved! Check product.");
   };
 
   const handleCancel = () => {
@@ -214,6 +213,9 @@ const Inventory = () => {
 
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (filteredProducts.length === 0) {
+      toast.error("No products found!");
+    }
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page when search term changes
   };
@@ -485,7 +487,7 @@ const Inventory = () => {
                   )}
                 </div>
 
-                <div className="flex justify-end py-8 gap-4">
+                <div className="flex justify-end gap-4 py-8">
                   <Button variant="ghost" onClick={() => setDialogOpen(false)}>
                     Cancel
                   </Button>
@@ -538,7 +540,7 @@ const Inventory = () => {
                   <img
                     alt={product.title}
                     src={product.image}
-                    className="w-full h-auto lg:h-20 transition shadow-xl object-fit rounded-xl"
+                    className="w-full h-auto transition shadow-xl lg:h-20 object-fit rounded-xl"
                   />
                 </TableCell>
                 <TableCell className="text-center">
@@ -691,7 +693,7 @@ const Inventory = () => {
                               </div>
 
                               <div className="space-y-4">
-                                <label className="text-sm font-medium text-gray-700 flex items-start">
+                                <label className="flex items-start text-sm font-medium text-gray-700">
                                   Upload Image
                                 </label>
                                 <div className="relative w-full">
@@ -722,12 +724,12 @@ const Inventory = () => {
                                   <img
                                     src={imagePreview}
                                     alt="Preview"
-                                    className="mt-4 border rounded-lg h-56"
+                                    className="h-56 mt-4 border rounded-lg"
                                   />
                                 )}
                               </div>
 
-                              <div className="flex justify-end py-8 gap-4">
+                              <div className="flex justify-end gap-4 py-8">
                                 <Button variant="ghost" onClick={handleCancel}>
                                   Cancel
                                 </Button>
@@ -781,7 +783,7 @@ const Inventory = () => {
             {[...Array(totalPages)].map((_, index) => (
               <button
                 key={index}
-                onClick={() => handleItemsPerPageChange(index + 1)}
+                onClick={() => setCurrentPage(index + 1)} // Set the clicked page as current
                 className={`px-3 py-1 border rounded ${
                   currentPage === index + 1
                     ? "bg-blue-500 text-white"
@@ -805,6 +807,7 @@ const Inventory = () => {
             </button>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

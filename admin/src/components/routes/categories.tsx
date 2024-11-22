@@ -44,10 +44,10 @@ const Category = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, ,] = useState(10);
   const [filteredCategories, setFilteredCategories] = useState<
     SingleCategory[]
-  >([]); // Use SingleCategory[] here
+  >([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const totalPages = Math.ceil(category.length / itemsPerPage);
@@ -64,11 +64,6 @@ const Category = () => {
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-  };
-
-  const handleItemsPerPageChange = (e: any) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1); // Reset to the first page
   };
 
   const handleInputChange = (
@@ -285,7 +280,7 @@ const Category = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end px-8 py-8 absolute bottom-0 right-0">
+                <div className="absolute bottom-0 right-0 flex justify-end px-8 py-8">
                   <Button variant="ghost" onClick={() => setDialogOpen(false)}>
                     Cancel
                   </Button>
@@ -379,7 +374,7 @@ const Category = () => {
                             </div>
                           </div>
 
-                          <div className="flex justify-end px-8 py-8 absolute bottom-0 right-0">
+                          <div className="absolute bottom-0 right-0 flex justify-end px-8 py-8">
                             <Button variant="ghost" onClick={handleCancel}>
                               Cancel
                             </Button>
@@ -432,7 +427,7 @@ const Category = () => {
             {[...Array(totalPages)].map((_, index) => (
               <button
                 key={index}
-                onClick={() => handleItemsPerPageChange(index + 1)}
+                onClick={() => setCurrentPage(index + 1)} // Set the clicked page as current
                 className={`px-3 py-1 border rounded ${
                   currentPage === index + 1
                     ? "bg-blue-500 text-white"
