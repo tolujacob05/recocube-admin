@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/Logo.png";
 import { Icon } from "@iconify/react";
 import HelpCard from "./help-card";
 import { NavLink } from "react-router-dom";
