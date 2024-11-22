@@ -21,10 +21,12 @@ import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { apiService } from "@/service/api-service";
 import SearchTable from "../Search";
+import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css";
 
 type SingleCategory = {
   id: number; // Adding ID for unique identification
-  category: "electronics" | "jewelery" | "men's clothing" | "women's clothing";
+  category: string;
 };
 
 // Define a category array type
@@ -109,6 +111,15 @@ const Category = () => {
     }
   }, []);
 
+  // useEffect(() => {
+  //   const storedCategory: Category = JSON.parse(
+  //     localStorage.getItem("category") || "[]"
+  //   );
+  //   fetchData();
+  //   setCategory(storedCategory);
+  //   setFilteredCategories(storedCategory);
+  // }, []);
+
   const validateForm = () => {
     const errors = {
       category: formState.category ? "" : "Category is required.",
@@ -127,31 +138,22 @@ const Category = () => {
     const updatedCategory = currentCategory
       ? category.map((p) =>
           p.id === currentCategory.id
-            ? {
-                ...p,
-                category: formState.category as
-                  | "electronics"
-                  | "jewelery"
-                  | "men's clothing"
-                  | "women's clothing",
-              }
+            ? { ...p, category: formState.category } // Update existing category
             : p
         )
       : [
           ...category,
           {
             id: category.length + 1,
-            category: formState.category as
-              | "electronics"
-              | "jewelery"
-              | "men's clothing"
-              | "women's clothing",
+            category: formState.category, // Add new category
           },
         ];
 
     setCategory(updatedCategory);
+    setFilteredCategories(updatedCategory); // Update filtered categories
     localStorage.setItem("category", JSON.stringify(updatedCategory));
 
+    // Reset form and state
     setDialogOpen(false);
     setFormState({ category: "", errors: { category: "" } });
     setCurrentCategory(null);
@@ -161,13 +163,18 @@ const Category = () => {
     if (!currentCategory) return;
 
     const updatedCategory = category.map((p) =>
-      p.id === currentCategory.id ? currentCategory : p
+      p.id === currentCategory.id
+        ? { ...p, category: currentCategory.category }
+        : p
     );
 
     setCategory(updatedCategory);
+    setFilteredCategories(updatedCategory); // Sync filtered categories
     localStorage.setItem("category", JSON.stringify(updatedCategory));
     setIsOpen(false);
     setCurrentCategory(null);
+
+    toast.success("Category updated successfully.");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -198,10 +205,12 @@ const Category = () => {
   };
 
   const handleDelete = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      const updatedCategory = category.filter((category) => category.id !== id);
+    if (window.confirm("Are you sure you want to delete this category?")) {
+      const updatedCategory = category.filter((cat) => cat.id !== id);
       setCategory(updatedCategory);
+      setFilteredCategories(updatedCategory); // Sync filtered categories
       localStorage.setItem("category", JSON.stringify(updatedCategory));
+      toast.success("Category deleted.");
     }
   };
 
@@ -452,6 +461,8 @@ const Category = () => {
           </div>
         </div>
       </div>
+
+      <ToastContainer />
     </>
   );
 };
