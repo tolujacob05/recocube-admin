@@ -209,6 +209,8 @@ const Inventory = () => {
       setProducts(updatedProducts);
       localStorage.setItem("products", JSON.stringify(updatedProducts));
     }
+
+    toast.success("Product deleted.");
   };
 
   // Handle search input change
