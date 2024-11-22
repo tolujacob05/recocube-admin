@@ -543,7 +543,7 @@ const Inventory = () => {
                     <img
                       alt={product.title}
                       src={product.image}
-                      className="w-full h-auto transition shadow-xl lg:h-20 object-fit rounded-xl"
+                      className="w-full h-auto transition shadow-xl lg:h-52 object-fit rounded-xl"
                     />
                   </div>
                 </TableCell>
