@@ -317,11 +317,11 @@ const Inventory = () => {
                         className="px-4 py-3 leading-9 border-2 border-[#F2F2F2] rounded-md w-full h-20"
                       />
                       <span
-                        className={`absolute leading-10 transition transform left-4 ${
+                        className={`absolute leading-10 transition transform left-4 top-4 ${
                           formState.description
                             ? "-translate-y-4 text-gray-500"
                             : ""
-                        } group-focus-within:-translate-y-20 group-focus-within:text-gray-500`}
+                        } group-focus-within:-translate-y-14 group-focus-within:text-gray-500`}
                       >
                         Description
                       </span>
@@ -539,11 +539,13 @@ const Inventory = () => {
                 <TableCell>{product.rating.count}</TableCell>
                 <TableCell>{product.rating.rate}</TableCell>
                 <TableCell>
-                  <img
-                    alt={product.title}
-                    src={product.image}
-                    className="w-full h-auto transition shadow-xl lg:h-20 object-fit rounded-xl"
-                  />
+                  <div className="w-40">
+                    <img
+                      alt={product.title}
+                      src={product.image}
+                      className="w-full h-auto transition shadow-xl lg:h-20 object-fit rounded-xl"
+                    />
+                  </div>
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-4">
