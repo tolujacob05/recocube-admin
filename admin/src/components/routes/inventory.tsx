@@ -107,9 +107,14 @@ const Inventory = () => {
   };
 
   useEffect(() => {
+    // Load products from local storage on initial load
     const storedProducts = JSON.parse(localStorage.getItem("products") || "[]");
-    fetchData();
-    setProducts(storedProducts);
+    if (storedProducts.length > 0) {
+      setProducts(storedProducts);
+    } else {
+      // If no stored products, fetch from API
+      fetchData();
+    }
   }, []);
 
   const validateForm = () => {
@@ -507,7 +512,7 @@ const Inventory = () => {
         </Dialog>
       </div>
 
-      <div className="w-full mt-4 overflow-x-auto md:overflow-x-visible">
+      <div className="container mx-auto mt-4 overflow-x-auto">
         <Table>
           <TableCaption>A list of your products.</TableCaption>
           <TableHeader>
@@ -535,7 +540,9 @@ const Inventory = () => {
                 <TableCell className="text-center">
                   {product.category}
                 </TableCell>
-                <TableCell>{product.description}</TableCell>
+                <TableCell className="truncate max-w-[150px] md:overflow-visible md:whitespace-normal">
+                  {product.description}
+                </TableCell>
                 <TableCell>{product.rating.count}</TableCell>
                 <TableCell>{product.rating.rate}</TableCell>
                 <TableCell>
@@ -770,7 +777,8 @@ const Inventory = () => {
 
         <div className="flex items-center justify-between py-4">
           <div className="text-sm text-gray-500">
-            Showing {itemsPerPage} entries per page
+            Showing {currentProducts.length} of {filteredProducts.length}{" "}
+            entries
           </div>
 
           <div className="flex items-center gap-2">
@@ -811,8 +819,9 @@ const Inventory = () => {
             </button>
           </div>
         </div>
-        <ToastContainer />
       </div>
+
+      <ToastContainer />
     </>
   );
 };
