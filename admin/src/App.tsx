@@ -9,7 +9,7 @@ import Category from "./components/routes/categories";
 function App() {
   return (
     <Router>
-      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="grid w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] h-40">
         {/* Sidebar */}
         <SideBarMd />
 
