@@ -1,28 +1,12 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Search } from "lucide-react";
-import { Icon } from "@iconify/react";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { apiService } from "@/service/api-service";
 import SearchTable from "../Search";
 import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
 import "react-toastify/dist/ReactToastify.css";
+import CategoryDialog from "@/dialogs/category-dialog";
+import CategoryTable from "@/tables/categoty-table";
 
 type SingleCategory = {
   id: number; // Adding ID for unique identification
@@ -180,7 +164,6 @@ const Category = () => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSave();
-      handleEditSave();
     }
   };
 
@@ -247,7 +230,7 @@ const Category = () => {
           </div>
         </form>
 
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        {/* <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger>
             <Button variant="outline" onClick={() => setDialogOpen(true)}>
               Create Category
@@ -304,118 +287,31 @@ const Category = () => {
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
+
+        <CategoryDialog
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+          formState={formState}
+          handleInputChange={handleInputChange}
+          handleSave={handleSave}
+          onKeyPress={handleKeyPress}
+        />
       </div>
 
       <div className="w-full mt-4 overflow-x-auto md:overflow-x-visible">
-        <Table className="">
-          <TableCaption>A list of your recent category.</TableCaption>
-          <TableHeader>
-            <TableRow className="text-[#121F3E] dark:text-[#F4F6FF]">
-              <TableHead className="w-[100px]">S/N</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead className="text-center">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentCategories.map((categoryItem) => (
-              <TableRow
-                key={categoryItem.id}
-                className="text-[#576378] dark:text-[#F4F6FF]"
-              >
-                <TableCell>INV00{categoryItem.id}</TableCell>
-                <TableCell className="font-medium">
-                  {categoryItem.category}
-                </TableCell>
-
-                {/* Actions */}
-                <TableCell className="flex items-center justify-center gap-4">
-                  {/* Edit Button */}
-                  <Dialog
-                    open={isOpen}
-                    onOpenChange={(open) => setIsOpen(open)}
-                  >
-                    <DialogTrigger>
-                      <Icon
-                        icon="mage:edit-pen"
-                        className="w-5 h-5 font-bold text-[#121F3E] dark:text-[#F4F6FF]"
-                        onClick={() =>
-                          handleEdit(categoryItem as SingleCategory)
-                        }
-                      />
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle className="dark:text-[#F4F6FF]">
-                          Edit Category
-                        </DialogTitle>
-                        <DialogDescription>
-                          {/* Add your form or input for editing */}
-                          <div className="space-y-10 overflow-x-auto">
-                            <div className="space-y-2">
-                              <span className="dark:text-[#F4F6FF] flex items-start">
-                                Category Name:
-                              </span>
-                              <label className="relative flex flex-col-reverse group">
-                                <input
-                                  type="text"
-                                  name="title"
-                                  value={currentCategory?.category || ""}
-                                  onKeyDown={handleEnterPress}
-                                  onChange={(e) =>
-                                    setCurrentCategory((prev) =>
-                                      prev
-                                        ? {
-                                            ...prev,
-                                            category: e.target.value as
-                                              | "electronics"
-                                              | "jewelery"
-                                              | "men's clothing"
-                                              | "women's clothing",
-                                          }
-                                        : null
-                                    )
-                                  }
-                                  required
-                                  className="px-4 py-3 leading-9 border-2 border-[#F2F2F2] rounded-md h-10 w-full"
-                                />
-                              </label>
-                            </div>
-                          </div>
-
-                          <div className="absolute bottom-0 right-0 flex justify-end px-8 py-8">
-                            <Button variant="ghost" onClick={handleCancel}>
-                              Cancel
-                            </Button>
-                            <Button
-                              variant="secondary"
-                              className="bg-[#213899] text-white hover:text-[#2E2F30]"
-                              onClick={handleEditSave}
-                            >
-                              Save
-                            </Button>
-                          </div>
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
-
-                  {/* Delete Button */}
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => handleDelete(categoryItem.id)}
-                  >
-                    <Icon
-                      icon="mage:trash-3"
-                      className="w-5 h-5 font-bold text-[#121F3E] cursor-pointer dark:text-[#bbb2b2]"
-                    />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <CategoryTable
+          currentCategories={currentCategories}
+          currentCategory={currentCategory}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setCurrentCategory={setCurrentCategory}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          handleEditSave={handleEditSave}
+          handleCancel={handleCancel}
+          handleEnterPress={handleEnterPress}
+        />
 
         <div className="flex items-center justify-between py-4">
           <div className="text-sm text-gray-500">
