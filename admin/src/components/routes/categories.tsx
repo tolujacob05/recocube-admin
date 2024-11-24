@@ -164,7 +164,6 @@ const Category = () => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSave();
-      handleEditSave();
     }
   };
 

@@ -36,7 +36,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="dark:text-[#F4F6FF]">
-            New Inventory Stock Entry
+            Create a new category
           </DialogTitle>
           <DialogDescription>
             <div className="space-y-10 overflow-x-auto">
